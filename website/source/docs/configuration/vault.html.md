@@ -68,11 +68,12 @@ vault {
   version.
 
 - `cert_file` `(string: "")` - Specifies the path to the certificate used
-  for Vault communication. If this is set then you need to also set
-  `tls_key_file`.
+  for Vault communication. This must be set if [tls_require_and_verify_client_cert](https://www.vaultproject.io/docs/configuration/listener/tcp/#inlinecode-tls_require_and_verify_client_cert)
+  is enabled in Vault.
 
 - `key_file` `(string: "")` - Specifies the path to the private key used for
-  Vault communication. If this is set then you need to also set `cert_file`.
+  Vault communication. If this is set then you need to also set `cert_file`. This must be set if [tls_require_and_verify_client_cert](https://www.vaultproject.io/docs/configuration/listener/tcp/#inlinecode-tls_require_and_verify_client_cert)
+  is enabled in Vault.
   
 - `namespace` `(string: "")` - Specifies the [Vault namespace](https://www.vaultproject.io/docs/enterprise/namespaces/index.html)
   used by the Vault integration. If non-empty, this namespace will be used on 
