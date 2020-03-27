@@ -128,14 +128,12 @@ func (f *EnvAWSFingerprint) Fingerprint(request *FingerprintRequest, response *F
 		response.AddAttribute(key, v)
 	}
 
-	// newNetwork is populated and added to the Nodes resources
-	var newNetwork *structs.NetworkResource
-
 	// copy over network specific information
 	if val, ok := response.Attributes["unique.platform.aws.local-ipv4"]; ok && val != "" {
 		response.AddAttribute("unique.network.ip-address", val)
 
-		newNetwork = &structs.NetworkResource{
+		newNetwork := &structs.NetworkResource{
+			Mode: "host",
 			Device: "eth0",
 			IP:     val,
 			CIDR:   val + "/32",
