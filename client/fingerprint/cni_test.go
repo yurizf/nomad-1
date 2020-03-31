@@ -72,7 +72,10 @@ func TestCNIFingerprint(t *testing.T) {
 				require.Contains(err.Error(), c.errMatch)
 			} else {
 				require.NoError(err)
-				require.Exactly(c.exp, resp)
+				require.Equal(c.exp.Detected, resp.Detected)
+				if resp.NodeResources != nil || c.exp.NodeResources != nil {
+					require.ElementsMatch(c.exp.NodeResources.Networks, resp.NodeResources.Networks)
+				}
 			}
 		})
 	}

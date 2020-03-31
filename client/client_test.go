@@ -1263,7 +1263,7 @@ func Test_UpdateNodeFromFingerprintMultiIP(t *testing.T) {
 	// Client without network configured updates to match fingerprint
 	client, cleanup := TestClient(t, func(c *config.Config) {
 		c.NetworkInterface = dev
-		c.Node.NodeResources.Networks[0].Device = dev
+		c.Options["fingerprint.blacklist"] = "network,cni,bridge"
 		c.Node.Resources.Networks = c.Node.NodeResources.Networks
 	})
 	defer cleanup()
@@ -1278,12 +1278,13 @@ func Test_UpdateNodeFromFingerprintMultiIP(t *testing.T) {
 		},
 	})
 
-	two := structs.Networks{
+	nets := structs.Networks{
+		mock.Node().NodeResources.Networks[0],
 		{Device: dev, IP: "127.0.0.1"},
 		{Device: dev, IP: "::1"},
 	}
 
-	require.Equal(t, two, client.config.Node.NodeResources.Networks)
+	require.Equal(t, nets, client.config.Node.NodeResources.Networks)
 }
 
 func TestClient_computeAllocatedDeviceStats(t *testing.T) {

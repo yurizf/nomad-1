@@ -133,7 +133,7 @@ func (f *EnvAWSFingerprint) Fingerprint(request *FingerprintRequest, response *F
 		response.AddAttribute("unique.network.ip-address", val)
 
 		newNetwork := &structs.NetworkResource{
-			Mode: "host",
+			Mode:   "host",
 			Device: "eth0",
 			IP:     val,
 			CIDR:   val + "/32",
