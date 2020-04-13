@@ -5205,6 +5205,10 @@ type TaskGroup struct {
 	// ShutdownDelay is the amount of time to wait between deregistering
 	// group services in consul and stopping tasks.
 	ShutdownDelay *time.Duration
+
+	// StopAfterClientDisconnected, if set, configures the client to stop the task group
+	// after this duration since the last known good heartbeat
+	StopAfterClientDisconnected *time.Duration
 }
 
 func (tg *TaskGroup) Copy() *TaskGroup {
