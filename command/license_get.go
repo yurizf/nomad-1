@@ -15,13 +15,13 @@ Usage: nomad license get [options]
 Gets a new license in Servers and Clients
 General Options:
 
-	` + generalOptionsUsage() + `
+  ` + generalOptionsUsage() + `
 
 Get Options:
 	
-	-signed
-	  Determines if the returned license should be a signed blob instead of a
-	  parsed license.
+  -signed
+    Determines if the returned license should be a signed blob instead of a
+    parsed license.
 
 	`
 	return helpText

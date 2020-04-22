@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"strings"
 )
 
 type LicenseResetCommand struct {
@@ -18,9 +19,9 @@ active.
 
 General Options:
 
-	` + generalOptionsUsage()
+  ` + generalOptionsUsage()
 
-	return helpText
+	return strings.TrimSpace(helpText)
 }
 
 func (c *LicenseResetCommand) Synopsis() string {
