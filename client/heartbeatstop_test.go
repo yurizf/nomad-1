@@ -44,7 +44,16 @@ func TestHearbeatStop_allocHook(t *testing.T) {
 
 	err := client.addAlloc(alloc, "")
 	require.NoError(t, err)
-	require.Contains(t, client.heartbeatStop.allocs, alloc.ID)
+	testutil.WaitForResult(func() (bool, error) {
+		for k := range client.heartbeatStop.allocs {
+			if k == alloc.ID {
+				return true, nil
+			}
+		}
+		return false, nil
+	}, func(err error) {
+		require.NoError(t, err)
+	})
 
 	err = client.registerNode()
 	require.NoError(t, err)
