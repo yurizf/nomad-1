@@ -5206,9 +5206,9 @@ type TaskGroup struct {
 	// group services in consul and stopping tasks.
 	ShutdownDelay *time.Duration
 
-	// StopAfterClientDisconnected, if set, configures the client to stop the task group
+	// StopAfterClientDisconnect, if set, configures the client to stop the task group
 	// after this duration since the last known good heartbeat
-	StopAfterClientDisconnected *time.Duration
+	StopAfterClientDisconnect *time.Duration
 }
 
 func (tg *TaskGroup) Copy() *TaskGroup {
