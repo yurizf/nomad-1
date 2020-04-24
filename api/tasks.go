@@ -427,7 +427,7 @@ type TaskGroup struct {
 	Meta                      map[string]string
 	Services                  []*Service
 	ShutdownDelay             *time.Duration `mapstructure:"shutdown_delay"`
-	StopAfterClientDisconnect *time.Duration `mapstructure:"stop_after_client_disconnected"`
+	StopAfterClientDisconnect *time.Duration `mapstructure:"stop_after_client_disconnect"`
 	Scaling                   *ScalingPolicy
 }
 

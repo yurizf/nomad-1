@@ -152,7 +152,7 @@ job "binstore-storagelocker" {
       }
     }
 
-    stop_after_client_disconnected = "120s"
+    stop_after_client_disconnect = "120s"
 
     task "binstore" {
       driver = "docker"
