@@ -772,8 +772,8 @@ func (c *Client) Stats() map[string]map[string]string {
 			"node_id":         c.NodeID(),
 			"known_servers":   strings.Join(c.GetServers(), ","),
 			"num_allocations": strconv.Itoa(c.NumAllocs()),
-			"heartbeat_ttl":   fmt.Sprintf("%v", c.heartbeatTTL),
 			"last_heartbeat":  fmt.Sprintf("%v", time.Since(c.lastHeartbeat())),
+			"heartbeat_ttl":   fmt.Sprintf("%v", c.heartbeatTTL),
 		},
 		"runtime": hstats.RuntimeStats(),
 	}
@@ -1122,7 +1122,10 @@ func (c *Client) restoreState() error {
 
 		// Maybe mark the alloc for halt on missing server heartbeats
 		if c.heartbeatStop.shouldStop(alloc) {
-			ar.Destroy()
+			err = c.heartbeatStop.stopAlloc(alloc.ID)
+			if err != nil {
+				c.logger.Error("error stopping alloc", "error", err, "alloc_id", alloc.ID)
+			}
 			continue
 		}
 
