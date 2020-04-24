@@ -23,7 +23,15 @@ func TestHearbeatStop_allocHook(t *testing.T) {
 	})
 	defer cleanupC1()
 
-	d := 1 * time.Second
+	// last heartbeat is persisted in the state db
+	err := client.registerNode()
+	require.NoError(t, err)
+	last, err := client.stateDB.GetLastHeartbeatOk()
+	require.NoError(t, err)
+	require.Empty(t, last)
+
+	// an allocation, with a tiny lease
+	d := 1 * time.Microsecond
 	alloc := &structs.Allocation{
 		ID:        uuid.Generate(),
 		TaskGroup: "foo",
@@ -42,23 +50,17 @@ func TestHearbeatStop_allocHook(t *testing.T) {
 		},
 	}
 
-	err := client.addAlloc(alloc, "")
+	// alloc added to heartbeatStop.allocs
+	err = client.addAlloc(alloc, "")
 	require.NoError(t, err)
 	testutil.WaitForResult(func() (bool, error) {
-		for k := range client.heartbeatStop.allocs {
-			if k == alloc.ID {
-				return true, nil
-			}
-		}
-		return false, nil
+		_, ok := client.heartbeatStop.allocs[alloc.ID]
+		return ok, nil
 	}, func(err error) {
 		require.NoError(t, err)
 	})
 
-	err = client.registerNode()
-	require.NoError(t, err)
-
-	last, err := client.stateDB.GetLastHeartbeatOk()
-	require.NoError(t, err)
-	require.Empty(t, last)
+	// the tiny lease causes the watch loop to destroy it
+	require.Empty(t, client.heartbeatStop.allocs[alloc.ID])
+	require.Empty(t, client.allocs[alloc.ID])
 }
