@@ -61,6 +61,12 @@ func TestHearbeatStop_allocHook(t *testing.T) {
 	})
 
 	// the tiny lease causes the watch loop to destroy it
-	require.Empty(t, client.heartbeatStop.allocs[alloc.ID])
+	testutil.WaitForResult(func() (bool, error) {
+		_, ok := client.heartbeatStop.allocs[alloc.ID]
+		return !ok, nil
+	}, func(err error) {
+		require.NoError(t, err)
+	})
+
 	require.Empty(t, client.allocs[alloc.ID])
 }
